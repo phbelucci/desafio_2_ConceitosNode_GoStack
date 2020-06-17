@@ -34,7 +34,7 @@ app.post("/repositories", (request, response) => {
     title,
     url,
     techs,
-    likes
+    likes : 0
   }
   repositories.push(repository)
 
@@ -45,23 +45,25 @@ app.post("/repositories", (request, response) => {
 app.put("/repositories/:id",validarId, (request, response) => {
   // TODO
   const {id} = request.params
-  const {title, url, techs} = request.body
+  const {likes, title, url, techs} = request.body
 
   const repositoryIndex = repositories.findIndex(repository => repository.id === id)
 
+  if(likes){
+    return response.status(400).json(repositories[repositoryIndex])
+  }
   const repositoryUpdated = {
+    id,
     title,
     url,
-    techs
+    techs,
+    likes: repositories[repositoryIndex].likes
   }
+
 
   repositories[repositoryIndex] = repositoryUpdated
 
-  if(repositoryIndex < 0){
-    return response.json({message : "Repository not found!"})
-  }
-
-  response.status(200).json(repositoryUpdated) 
+  response.json(repositoryUpdated) 
 
 });
 
@@ -73,7 +75,7 @@ app.delete("/repositories/:id", validarId, (request, response) => {
 
   repositories.splice(repositoryIndex,1)
 
-  return response.status(200).json({message: "Project excluded."})
+  return response.status(204).send("")
 
 });
 
