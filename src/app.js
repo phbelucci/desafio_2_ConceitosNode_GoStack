@@ -86,7 +86,7 @@ app.post("/repositories/:id/like", validarId, (request, response) => {
 
     repositories[repositoryIndex].likes = actualLikes
   
-    return response.status(200).json(actualLikes)
+    return response.status(200).json(repositories[repositoryIndex])
   
 });
 
